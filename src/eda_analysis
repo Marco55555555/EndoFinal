@@ -1,0 +1,132 @@
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# ===============================
+# CONFIGURACIÓN GENERAL
+# ===============================
+sns.set_style("whitegrid")
+plt.rcParams["figure.figsize"] = (10, 5)
+plt.rcParams["font.size"] = 11
+
+DATA_PATH = "data/processed/merged_sales_social.csv"
+OUTPUT_DIR = "reports/eda_figures"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+print("=== EDA – Exploratory Data Analysis ===\n")
+
+# ===============================
+# 1. CARGA DE DATOS
+# ===============================
+df = pd.read_csv(DATA_PATH)
+df["date"] = pd.to_datetime(df["date"])
+
+print("Shape:", df.shape)
+print("\nColumnas:")
+print(df.columns)
+
+print("\nTipos de datos:")
+print(df.dtypes)
+
+print("\nPrimeras filas:")
+print(df.head())
+
+# ===============================
+# 2. NULOS
+# ===============================
+print("\nValores nulos:")
+print(df.isnull().sum())
+
+plt.figure(figsize=(10,4))
+df.isnull().sum().plot(kind="bar", color="#F18F01")
+plt.title("Valores Nulos por Columna")
+plt.ylabel("Cantidad de Nulos")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/nulos.png")
+
+# ===============================
+# 3. DISTRIBUCIÓN DE VENTAS
+# ===============================
+plt.figure(figsize=(10,5))
+sns.histplot(df["sales"], bins=40, kde=True, color="#2E86AB")
+plt.title("Distribución de Ventas ($)")
+plt.xlabel("Ventas")
+plt.ylabel("Frecuencia")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/distribucion_ventas.png")
+
+# ===============================
+# 4. VENTAS DIARIAS – SERIE TEMPORAL
+# ===============================
+daily_sales = df.groupby("date")["sales"].sum()
+
+plt.figure(figsize=(12,5))
+plt.plot(daily_sales.index, daily_sales.values, color="#06A77D")
+plt.title("Ventas Diarias – Serie Temporal")
+plt.xlabel("Fecha")
+plt.ylabel("Ventas ($)")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/ventas_diarias.png")
+
+# ===============================
+# 5. DISTRIBUCIÓN DEL SENTIMIENTO
+# ===============================
+plt.figure(figsize=(10,5))
+sns.histplot(df["sentiment"], bins=30, kde=True, color="#C73E1D")
+plt.title("Distribución del Sentimiento Promedio")
+plt.xlabel("Sentimiento")
+plt.ylabel("Frecuencia")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/distribucion_sentimiento.png")
+
+# ===============================
+# 6. CANTIDAD POR TIPO DE RESTAURANTE
+# ===============================
+plt.figure(figsize=(10,5))
+df["restaurant_type"].value_counts().plot(kind="bar", color="#2E86AB")
+plt.title("Distribución por Tipo de Restaurante")
+plt.xlabel("Tipo")
+plt.ylabel("Cantidad de Registros")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/tipo_restaurante.png")
+
+# ===============================
+# 7. CANTIDAD POR TIPO DE COMIDA
+# ===============================
+plt.figure(figsize=(10,5))
+df["meal_type"].value_counts().plot(kind="bar", color="#06A77D")
+plt.title("Distribución por Tipo de Comida")
+plt.xlabel("Tipo de comida")
+plt.ylabel("Cantidad")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/tipo_comida.png")
+
+# ===============================
+# 8. BOXPLOT: SENTIMIENTO POR TIPO DE RESTAURANTE
+# ===============================
+plt.figure(figsize=(10,5))
+sns.boxplot(data=df, x="restaurant_type", y="sentiment", palette="Set2")
+plt.xticks(rotation=45)
+plt.title("Sentimiento por Tipo de Restaurante")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/box_sentimiento_restaurante.png")
+
+# ===============================
+# 9. HEATMAP DE CORRELACIÓN
+# ===============================
+numeric_df = df.select_dtypes(include=["float64", "int64"])
+corr = numeric_df.corr()
+
+plt.figure(figsize=(10,6))
+sns.heatmap(corr, annot=True, cmap="YlOrRd", fmt=".2f")
+plt.title("Mapa de Correlación (Variables Numéricas)")
+plt.tight_layout()
+plt.savefig(f"{OUTPUT_DIR}/heatmap_correlacion.png")
+
+# ===============================
+# FINAL
+# ===============================
+print("\n=== EDA COMPLETO ===")
+print(f"Gráficos guardados en: {OUTPUT_DIR}")

@@ -1,0 +1,24 @@
+pipeline:
+  name: "Restaurant Sales and Social Sentiment Pipeline"
+  version: "1.0"
+
+data_sources:
+  sales_data:
+    path: "data/raw/restaurant_sales_data.csv"
+  social_data:
+    path: "data/raw/social_media_posts.csv"
+
+steps:
+  - name: ingestion
+    script: "src/data_ingestion.py"
+  - name: transformation
+    script: "src/data_transformation.py"
+  - name: validation
+    script: "src/data_validation.py"
+
+logging:
+  level: "INFO"
+  file: "pipeline_execution.log"
+
+output:
+  processed_data: "data/processed/merged_sales_social.csv"
