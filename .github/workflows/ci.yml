@@ -1,5 +1,6 @@
 name: CI - Pipeline Tests
 
+# Se ejecuta en cada push y pull request
 on:
   push:
   pull_request:
@@ -9,28 +10,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # 1. Clonar el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      # 2. Configurar Python 3.10
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-        
-    - name: Run orchestrator to validate pipeline integration
-      env:
-        PYTHONPATH: .
-      run: |
-        python src/orchestrator.py
+      # 4. Correr tests con pytest antes de ejecutar el pipeline
+      - name: Run tests
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest tests/ -v
 
-    - name: Run analysis module to verify reporting works
-      env:
-        PYTHONPATH: .
-      run: |
-        python src/analysis.py
+      # 5. Ejecutar el pipeline principal (orchestrator)
+      - name: Run orchestrator to validate pipeline integration
+        env:
+          PYTHONPATH: .
+        run: |
+          echo "=== Running orchestrator.py ==="
+          python src/orchestrator.py
+
+      # 6. Ejecutar módulo de análisis para verificar reporting
+      - name: Run analysis module to verify reporting works
+        env:
+          PYTHONPATH: .
+        run: |
+          echo "=== Running analysis.py ==="
+          python src/analysis.py

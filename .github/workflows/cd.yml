@@ -1,5 +1,6 @@
 name: CD - Automated Data Pipeline
 
+# Ejecutar diariamente a las 6 AM y también manualmente
 on:
   schedule:
     - cron: "0 6 * * *"
@@ -10,29 +11,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # 1. Clonar el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      # 2. Configurar Python 3.10
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run full pipeline
-      env:
-        PYTHONPATH: .
-      run: |
-        python src/orchestrator.py
-        python src/analysis.py
+      # 4. Ejecutar el pipeline completo
+      - name: Run full pipeline
+        env:
+          PYTHONPATH: .
+        run: |
+          echo "=== Running orchestrator.py ==="
+          python src/orchestrator.py
+          echo "=== Running analysis.py ==="
+          python src/analysis.py
 
-        
-    - name: Upload reports as artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: reports
-        path: reports/
+      # 5. Subir los reportes generados como artifacts
+      - name: Upload reports as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: reports/

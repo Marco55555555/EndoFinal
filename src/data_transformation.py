@@ -1,84 +1,73 @@
-# ============================================
-# data_transformation.py
-# Transformación para restaurant_sales_data.csv
-# ============================================
-
 import pandas as pd
+import logging
+from textblob import TextBlob
 
-def transform_sales_data(df):
-    """
-    Transforma los datos de ventas del restaurante para análisis:
-    - Agrupación diaria
-    - Ventas totales
-    - Sentimiento promedio
-    - Número de promociones
-    - Clima más común
-    """
+logging.basicConfig(level=logging.INFO)
 
-    # -------------------------------
+# Función para calcular sentimiento
+def compute_sentiment(text):
+    if pd.isna(text) or not isinstance(text, str):
+        return 0.0
+    try:
+        return TextBlob(str(text)).sentiment.polarity
+    except:
+        return 0.0
+
+
+# Transformación principal
+def transform_data(sales_df, social_df):
+
+    logging.info("=== Iniciando transformación de datos ===")
+    logging.info(f"Filas ventas: {len(sales_df)}, Filas social: {len(social_df)}")
+
     # 1. Convertir fecha
-    # -------------------------------
-    df["date"] = pd.to_datetime(df["date"])
+    sales_df["date"] = pd.to_datetime(sales_df["date"], errors="coerce")
+    social_df["date"] = pd.to_datetime(social_df["date"], errors="coerce")
 
-    # -------------------------------
-    # 2. Agrupar por fecha (daily)
-    # -------------------------------
-    daily_df = df.groupby("date").agg({
+    sales_df = sales_df.dropna(subset=["date"])
+    social_df = social_df.dropna(subset=["date"])
 
-        # Suma de ventas del día
-        "sales": "sum",
+    # 2. Crear columna SALES (no existe en tu CSV original)
+    logging.info("Calculando columna SALES = precio * cantidad...")
+    sales_df["sales"] = (
+        sales_df["actual_selling_price"] * sales_df["quantity_sold"]
+    )
 
-        # Sentimiento promedio diario
-        "sentiment": "mean",
+    # 3. Calcular sentimiento por post
+    logging.info("Calculando sentimiento de posts...")
+    social_df["post_sentiment"] = social_df["post_text"].apply(compute_sentiment)
 
-        # Sumar cuántas promociones hubo en el día
-        "has_promotion": "sum",
-
-        # Clima más frecuente
-        "weather_condition": lambda x: x.mode()[0] if not x.mode().empty else "Unknown"
-
+    daily_social = social_df.groupby("date").agg({
+        "post_sentiment": "mean",
+        "post_text": "count"
     }).reset_index()
 
-    # -------------------------------
-    # 3. Renombrar columnas finales
-    # -------------------------------
-    daily_df.rename(columns={
-        "sales": "daily_sales",
-        "sentiment": "avg_sentiment",
-        "has_promotion": "total_promotions",
+    daily_social.rename(columns={
+        "post_sentiment": "avg_post_sentiment",
+        "post_text": "num_posts"
     }, inplace=True)
 
-    return daily_df
+    # 4. Agrupación diaria de ventas
+    logging.info("Agregando datos de ventas...")
+    daily_sales = sales_df.groupby("date").agg({
+        "sales": "sum",
+        "has_promotion": "sum",
+        "weather_condition": lambda x: x.mode()[0] if len(x.mode()) else "Unknown"
+    }).reset_index()
 
+    daily_sales.rename(columns={
+        "sales": "daily_sales",
+        "has_promotion": "total_promotions"
+    }, inplace=True)
 
-# ===========================================================
-# Función opcional:
-# Procesar archivo directamente
-# (si deseas usar este módulo sin Streamlit)
-# ===========================================================
+    # 5. Merge ventas + social media
+    logging.info("Uniendo ventas + sentimiento social...")
+    merged = daily_sales.merge(daily_social, on="date", how="left")
 
-def load_and_transform(file_path):
-    """
-    Carga un CSV y devuelve el dataframe transformado.
-    Ideal para notebooks y scripts externos.
-    """
-    df = pd.read_csv(file_path)
-    return transform_sales_data(df)
+    merged["avg_post_sentiment"] = merged["avg_post_sentiment"].fillna(0)
+    merged["num_posts"] = merged["num_posts"].fillna(0)
 
+    logging.info(f"Transformación terminada. Filas finales: {len(merged)}")
+    logging.info("=== Fin transformación ===")
 
-# ===========================================================
-# Ejecución directa (solo si llamas el archivo desde terminal)
-# python data_transformation.py
-# ===========================================================
-if __name__ == "__main__":
-    try:
-        path = "restaurant_sales_data.csv"
-        print(f"Cargando archivo: {path}")
-        df = pd.read_csv(path)
-
-        transformed = transform_sales_data(df)
-        print("Transformación completa:")
-        print(transformed.head())
-
-    except Exception as e:
-        print("Error:", e)
+    return merged

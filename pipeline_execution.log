@@ -1,142 +1,15 @@
-2025-11-10 17:29:32,444 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-10 17:29:32,459 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-10 17:29:32,526 - INFO - Datos cargados: ventas=10000, redes=2 filas
-2025-11-10 17:29:32,527 - INFO - Procesando y uniendo datasets...
-2025-11-10 17:29:32,630 - INFO - Transformaciï¿½n completada.
-2025-11-10 17:29:32,630 - INFO - Validando datos procesados...
-2025-11-10 17:29:32,635 - WARNING - Existen valores nulos en el dataset procesado.
-2025-11-10 17:29:32,692 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-10 17:29:32,692 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-15 12:18:32,914 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-15 12:18:32,918 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-15 12:18:32,988 - INFO - Datos cargados: ventas=10000, redes=2 filas
-2025-11-15 12:18:32,988 - INFO - Procesando y uniendo datasets...
-2025-11-15 12:18:33,123 - INFO - Transformaciï¿½n completada.
-2025-11-15 12:18:33,123 - INFO - Validando datos procesados...
-2025-11-15 12:18:33,129 - WARNING - Existen 10000 valores nulos en el dataset procesado.
-2025-11-15 12:18:33,194 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-15 12:18:33,194 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-15 12:46:28,161 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-15 12:46:28,175 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-15 12:46:28,176 - ERROR - Error en la ejecuciï¿½n: [Errno 2] No such file or directory: 'data/raw/sales_data.csv'
-Traceback (most recent call last):
-  File "C:\Users\docya\OneDrive\Documentos\Proyecto ENDO\src\orchestrator.py", line 26, in main
-    sales_df, social_df = ingest_data(sales_path, social_path)
-                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\docya\OneDrive\Documentos\Proyecto ENDO\src\data_ingestion.py", line 8, in ingest_data
-    sales_df = pd.read_csv(sales_path)
-  File "C:\Users\docya\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
-    return _read(filepath_or_buffer, kwds)
-  File "C:\Users\docya\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
-    parser = TextFileReader(filepath_or_buffer, **kwds)
-  File "C:\Users\docya\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
-    self._engine = self._make_engine(f, self.engine)
-                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "C:\Users\docya\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
-    self.handles = get_handle(
-                   ~~~~~~~~~~^
-        f,
-        ^^
-    ...<6 lines>...
-        storage_options=self.options.get("storage_options", None),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\docya\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
-    handle = open(
-        handle,
-    ...<3 lines>...
-        newline="",
-    )
-FileNotFoundError: [Errno 2] No such file or directory: 'data/raw/sales_data.csv'
-2025-11-15 12:50:52,785 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-15 12:50:52,817 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-15 12:50:52,856 - INFO - Datos cargados: ventas=10000, redes=2 filas
-2025-11-15 12:50:52,856 - INFO - Procesando y uniendo datasets...
-2025-11-15 12:50:52,903 - INFO - Transformaciï¿½n completada.
-2025-11-15 12:50:52,904 - INFO - Validando datos procesados...
-2025-11-15 12:50:52,907 - WARNING - Existen 10000 valores nulos en el dataset procesado.
-2025-11-15 12:50:52,963 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-15 12:50:52,963 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-15 12:52:46,585 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-15 12:52:46,599 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-15 12:52:46,622 - INFO - Datos cargados: ventas=10000, redes=2 filas
-2025-11-15 12:52:46,622 - INFO - Procesando y uniendo datasets...
-2025-11-15 12:52:46,655 - INFO - Transformaciï¿½n completada.
-2025-11-15 12:52:46,656 - INFO - Validando datos procesados...
-2025-11-15 12:52:46,659 - WARNING - Existen 10000 valores nulos en el dataset procesado.
-2025-11-15 12:52:46,713 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-15 12:52:46,714 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-15 13:07:46,345 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-15 13:07:46,348 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-15 13:07:46,369 - INFO - Datos cargados: ventas=10000, redes=2 filas
-2025-11-15 13:07:46,369 - INFO - Procesando y uniendo datasets...
-2025-11-15 13:07:46,492 - INFO - Transformaciï¿½n completada.
-2025-11-15 13:07:46,493 - INFO - Validando datos procesados...
-2025-11-15 13:07:46,498 - WARNING - Existen 9942 valores nulos en el dataset procesado.
-2025-11-15 13:07:46,586 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-15 13:07:46,586 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-17 10:29:21,621 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-17 10:29:21,629 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-17 10:29:21,665 - INFO - Datos cargados: ventas=10000, redes=63 filas
-2025-11-17 10:29:21,665 - INFO - Procesando y uniendo datasets...
-2025-11-17 10:29:21,742 - INFO - Transformaciï¿½n completada.
-2025-11-17 10:29:21,742 - INFO - Validando datos procesados...
-2025-11-17 10:29:21,744 - WARNING - Existen 9224 valores nulos en el dataset procesado.
-2025-11-17 10:29:21,803 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-17 10:29:21,803 - INFO - Pipeline ejecutado exitosamente \u2705
-
-
-
-
-2025-11-17 15:25:22,028 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-17 15:25:22,032 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-17 15:25:22,064 - INFO - Datos cargados: ventas=10000, redes=63 filas
-2025-11-17 15:25:22,065 - INFO - Procesando y uniendo datasets...
-2025-11-17 15:25:22,135 - INFO - Transformación completada.
-2025-11-17 15:25:22,135 - INFO - Validando datos procesados...
-2025-11-17 15:25:22,138 - WARNING - Existen 9224 valores nulos en el dataset procesado.
-2025-11-17 15:25:22,206 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-17 15:25:22,206 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-21 17:37:02,421 - INFO - Inicio del pipeline Restaurant Sales \U0001f37d\ufe0f
-2025-11-21 17:37:02,423 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-21 17:37:02,449 - INFO - Datos cargados: ventas=10000, redes=63 filas
-2025-11-21 17:37:02,450 - INFO - Procesando y uniendo datasets...
-2025-11-21 17:37:02,538 - INFO - Transformación completada.
-2025-11-21 17:37:02,538 - INFO - Validando datos procesados...
-2025-11-21 17:37:02,541 - WARNING - Existen 9224 valores nulos en el dataset procesado.
-2025-11-21 17:37:02,607 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-21 17:37:02,607 - INFO - Pipeline ejecutado exitosamente \u2705
-2025-11-25 07:36:35,757 - INFO - Inicio del pipeline Restaurant Sales 
-2025-11-25 07:36:35,761 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-25 07:36:35,830 - INFO - Datos cargados: ventas=10000, redes=63 filas
-2025-11-25 07:36:35,830 - INFO - Procesando y uniendo datasets...
-2025-11-25 07:36:35,961 - INFO - Transformación completada.
-2025-11-25 07:36:35,961 - INFO - Validando datos procesados...
-2025-11-25 07:36:35,964 - WARNING - Existen 9224 valores nulos en el dataset procesado.
-2025-11-25 07:36:37,370 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
-2025-11-25 07:36:37,370 - INFO - Pipeline ejecutado exitosamente 
-2025-11-25 14:33:29,155 - INFO - Inicio del pipeline Restaurant Sales 
-2025-11-25 14:33:29,160 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-25 14:33:29,187 - INFO - Datos cargados: ventas=10000, redes=63 filas
-2025-11-25 14:33:29,187 - ERROR - Error en la ejecución: name 'logging' is not defined
-Traceback (most recent call last):
-  File "D:\Archivos Universidad\Universidad\ENDO\Proyecto\src\orchestrator.py", line 29, in main
-    processed_df = transform_data(sales_df, social_df)
-  File "D:\Archivos Universidad\Universidad\ENDO\Proyecto\src\data_transformation.py", line 2, in transform_data
-    logging.info("Procesando y uniendo datasets...")
-NameError: name 'logging' is not defined
-2025-11-25 14:40:10,566 - INFO - Inicio del pipeline Restaurant Sales 
-2025-11-25 14:40:10,570 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-25 14:40:10,603 - INFO - Datos cargados: ventas=10000, redes=300 filas
-2025-11-25 14:40:10,603 - ERROR - Error en la ejecución: name 'logging' is not defined
-Traceback (most recent call last):
-  File "D:\Archivos Universidad\Universidad\ENDO\Proyecto\src\orchestrator.py", line 29, in main
-    processed_df = transform_data(sales_df, social_df)
-  File "D:\Archivos Universidad\Universidad\ENDO\Proyecto\src\data_transformation.py", line 2, in transform_data
-    logging.info("Procesando y uniendo datasets...")
-NameError: name 'logging' is not defined
-2025-11-25 14:42:31,988 - INFO - Inicio del pipeline Restaurant Sales 
-2025-11-25 14:42:31,991 - INFO - Cargando datos de ventas y redes sociales...
-2025-11-25 14:42:32,010 - INFO - Datos cargados: ventas=10000, redes=300 filas
-2025-11-25 14:42:32,010 - INFO - Procesando y uniendo datasets...
+2025-11-29 14:37:23,614 - INFO - Inicio del pipeline Restaurant Sales 
+2025-11-29 14:37:23,615 - INFO - Cargando datos de ventas y redes sociales...
+2025-11-29 14:37:23,644 - INFO - Datos cargados: ventas=10000, redes=300 filas
+2025-11-29 14:37:23,644 - INFO - === Iniciando transformación de datos ===
+2025-11-29 14:37:23,644 - INFO - Filas ventas: 10000, Filas social: 300
+2025-11-29 14:37:23,654 - INFO - Calculando columna SALES = precio * cantidad...
+2025-11-29 14:37:23,654 - INFO - Calculando sentimiento de posts...
+2025-11-29 14:37:23,761 - INFO - Agregando datos de ventas...
+2025-11-29 14:37:23,835 - INFO - Uniendo ventas + sentimiento social...
+2025-11-29 14:37:23,838 - INFO - Transformación terminada. Filas finales: 367
+2025-11-29 14:37:23,838 - INFO - === Fin transformación ===
+2025-11-29 14:37:23,838 - INFO - Validando datos procesados...
+2025-11-29 14:37:23,838 - INFO - Validación completada sin errores.
+2025-11-29 14:37:23,847 - INFO - Datos procesados guardados en data/processed/merged_sales_social.csv
+2025-11-29 14:37:23,847 - INFO - Pipeline ejecutado exitosamente 

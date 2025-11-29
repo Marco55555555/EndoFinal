@@ -10,4 +10,7 @@ def ingest_data(sales_path, social_path):
 
     logging.info(f"Datos cargados: ventas={len(sales_df)}, redes={len(social_df)} filas")
 
+    print("Sales DF columnas:", list(sales_df.columns))
+    print("Social DF columnas:", list(social_df.columns))
+
     return sales_df, social_df
