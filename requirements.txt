@@ -8,3 +8,5 @@ textblob
 pyyaml
 requests
 pytest
+scikit-learn
+
