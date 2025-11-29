@@ -7,3 +7,4 @@ scipy
 textblob
 pyyaml
 requests
+pytest
