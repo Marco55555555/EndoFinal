@@ -37,7 +37,7 @@ except FileNotFoundError:
     print("   Ejecuta primero: python run_all.py")
     exit(1)
 
-print(f"✅ Dataset cargado correctamente")
+print(f" Dataset cargado correctamente")
 print(f"   • Registros: {len(df):,}")
 print(f"   • Rango de fechas: {df['date'].min().date()} a {df['date'].max().date()}")
 print(f"   • Columnas: {len(df.columns)}\n")
@@ -59,7 +59,7 @@ if nulls.sum() > 0:
 
 # 2. analisis de tendencia temporal
 print("\n" + "=" * 70)
-print("📈 ANÁLISIS 1: TENDENCIA TEMPORAL DE VENTAS")
+print(" ANÁLISIS 1: TENDENCIA TEMPORAL DE VENTAS")
 print("=" * 70)
 
 daily_sales = df.groupby("date")["quantity_sold"].sum()
@@ -259,7 +259,7 @@ ax2.legend(loc='upper right')
 plt.tight_layout()
 plt.savefig(os.path.join(reports_fig, "anova_restaurant_mejorado.png"), 
             dpi=150, bbox_inches='tight')
-print(f"✅ Gráfico guardado: anova_restaurant_mejorado.png")
+print(f" Gráfico guardado: anova_restaurant_mejorado.png")
 
 # Análisis adicional: Heatmap de desempeño temporal (estacionalidad)
 print(f"\n Generando análisis de estacionalidad por tipo...")
@@ -288,7 +288,7 @@ ax.set_ylabel("Tipo de Restaurante", fontsize=11)
 plt.tight_layout()
 plt.savefig(os.path.join(reports_fig, "heatmap_estacionalidad_tipo.png"), 
             dpi=150, bbox_inches='tight')
-print(f"✅ Gráfico guardado: heatmap_estacionalidad_tipo.png")
+print(f" Gráfico guardado: heatmap_estacionalidad_tipo.png")
 
 # Identificar mejor mes por tipo de restaurante
 print(f"\n Mejor mes por tipo de restaurante:")
@@ -297,9 +297,7 @@ for restaurant in performance_matrix.index:
     best_value = performance_matrix.loc[restaurant].max()
     print(f"   • {restaurant}: {best_month} ({best_value:.1f} unidades)")
 
-# ==============================================================================
 # 5. MODELO ARIMA - PREDICCIÓN DE VENTAS
-# ==============================================================================
 print("\n" + "=" * 70)
 print(" ANÁLISIS 4: PRONÓSTICO DE VENTAS (ARIMA)")
 print("=" * 70)
@@ -416,7 +414,7 @@ print(f" Resultados guardados en: analysis_results.txt")
 
 # 7. RESUMEN 
 print("\n" + "=" * 70)
-print("📋 RESUMEN")
+print(" RESUMEN")
 print("=" * 70 + "\n")
 
 # Sentimiento vs Ventas

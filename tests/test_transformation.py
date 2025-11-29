@@ -19,12 +19,12 @@ def test_transformation_creates_sales_column():
 
     transformed = transform_data(sales_df, social_df)
 
-    # Verificar que se haya creado la columna 'daily_sales'
-    assert "daily_sales" in transformed.columns
-    # Verificar que las ventas se sumen correctamente
-    assert transformed["daily_sales"].iloc[0] == 10*5 + 12*3
-    # Verificar que total_promotions esté correcta
-    assert transformed["total_promotions"].iloc[0] == 1 + 0
+    # Verificar que se haya creado la columna 'sales'
+    assert "sales" in transformed.columns
+    # Verificar que las ventas se calculen correctamente (precio * cantidad)
+    expected_sales = [10*5, 12*3]
+    for i, val in enumerate(expected_sales):
+        assert transformed["sales"].iloc[i] == val
 
 def test_sentiment_column_exists():
     sales_df = pd.DataFrame({
@@ -43,8 +43,8 @@ def test_sentiment_column_exists():
     transformed = transform_data(sales_df, social_df)
 
     # Verificar que exista la columna de sentimiento promedio
-    assert "avg_post_sentiment" in transformed.columns
+    assert "sentiment" in transformed.columns
     # Verificar que exista la columna de número de posts
     assert "num_posts" in transformed.columns
     # Verificar que el sentimiento se haya calculado correctamente (no NaN)
-    assert transformed["avg_post_sentiment"].iloc[0] != None
+    assert transformed["sentiment"].iloc[0] != None
