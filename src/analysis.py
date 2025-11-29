@@ -9,9 +9,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 import warnings
 warnings.filterwarnings('ignore')
 
-# ==============================================================================
-# 0. CONFIGURACIÓN Y RUTAS
-# ==============================================================================
+#  CONFIGURACIÓN Y RUTAS
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 processed_path = os.path.join(BASE_DIR, "data", "processed", "merged_sales_social.csv")
 reports_fig = os.path.join(BASE_DIR, "reports", "figures")
@@ -26,18 +24,16 @@ plt.rcParams['figure.dpi'] = 100
 plt.rcParams['font.size'] = 10
 
 print("=" * 70)
-print("📊 ANÁLISIS AVANZADO DE VENTAS Y SENTIMIENTO")
+print(" ANÁLISIS AVANZADO DE VENTAS Y SENTIMIENTO")
 print("=" * 70)
-print(f"📁 Cargando datos desde: {processed_path}\n")
+print(f" Cargando datos desde: {processed_path}\n")
 
-# ==============================================================================
 # 1. CARGA Y VALIDACIÓN DE DATOS
-# ==============================================================================
 try:
     df = pd.read_csv(processed_path)
     df["date"] = pd.to_datetime(df["date"])
 except FileNotFoundError:
-    print(f"❌ ERROR: No se encontró el archivo {processed_path}")
+    print(f" ERROR: No se encontró el archivo {processed_path}")
     print("   Ejecuta primero: python run_all.py")
     exit(1)
 
@@ -51,19 +47,17 @@ required_cols = ["quantity_sold", "sentiment", "sales", "restaurant_type", "date
 missing_cols = [col for col in required_cols if col not in df.columns]
 
 if missing_cols:
-    print(f"❌ ERROR: Columnas faltantes: {missing_cols}")
+    print(f" ERROR: Columnas faltantes: {missing_cols}")
     exit(1)
 
 # Mostrar nulos
 nulls = df.isnull().sum()
 if nulls.sum() > 0:
-    print("⚠️  Valores nulos detectados:")
+    print("  Valores nulos detectados:")
     print(nulls[nulls > 0])
     print()
 
-# ==============================================================================
-# 2. ANÁLISIS DE TENDENCIA TEMPORAL
-# ==============================================================================
+# 2. analisis de tendencia temporal
 print("\n" + "=" * 70)
 print("📈 ANÁLISIS 1: TENDENCIA TEMPORAL DE VENTAS")
 print("=" * 70)
@@ -91,20 +85,18 @@ ax2.grid(alpha=0.3)
 
 plt.tight_layout()
 plt.savefig(os.path.join(reports_fig, "tendencia_ventas_mejorada.png"), dpi=150, bbox_inches='tight')
-print(f"✅ Gráfico guardado: tendencia_ventas_mejorada.png")
+print(f" Gráfico guardado: tendencia_ventas_mejorada.png")
 
 # Estadísticas de tendencia
-print(f"\n📊 Estadísticas de Ventas:")
+print(f"\n Estadísticas de Ventas:")
 print(f"   • Promedio diario: {daily_sales.mean():.2f} unidades")
 print(f"   • Desviación estándar: {daily_sales.std():.2f}")
 print(f"   • Día con más ventas: {daily_sales.idxmax().date()} ({daily_sales.max():.0f} unidades)")
 print(f"   • Día con menos ventas: {daily_sales.idxmin().date()} ({daily_sales.min():.0f} unidades)")
 
-# ==============================================================================
-# 3. ANÁLISIS DE CORRELACIÓN SENTIMIENTO-VENTAS
-# ==============================================================================
+# 3. analisis de correlacion sentimiento ventas
 print("\n" + "=" * 70)
-print("🎯 ANÁLISIS 2: CORRELACIÓN SENTIMIENTO vs VENTAS")
+print(" ANÁLISIS 2: CORRELACIÓN SENTIMIENTO vs VENTAS")
 print("=" * 70)
 
 daily_sentiment = df.groupby("date")["sentiment"].mean()
@@ -123,7 +115,7 @@ corr_revenue = merged_trend["revenue"].corr(merged_trend["sentiment"])
 _, p_value_quantity = pearsonr(merged_trend["sales"], merged_trend["sentiment"])
 _, p_value_revenue = pearsonr(merged_trend["revenue"], merged_trend["sentiment"])
 
-print(f"\n📈 Resultados de Correlación:")
+print(f"\n Resultados de Correlación:")
 print(f"   • Correlación Sentimiento-Cantidad: {corr_quantity:.4f} (p={p_value_quantity:.4f})")
 print(f"   • Correlación Sentimiento-Ingresos: {corr_revenue:.4f} (p={p_value_revenue:.4f})")
 
@@ -166,13 +158,11 @@ ax2.grid(alpha=0.3)
 
 plt.tight_layout()
 plt.savefig(os.path.join(reports_fig, "correlacion_sentimiento_mejorada.png"), dpi=150, bbox_inches='tight')
-print(f"✅ Gráfico guardado: correlacion_sentimiento_mejorada.png")
+print(f" Gráfico guardado: correlacion_sentimiento_mejorada.png")
 
-# ==============================================================================
-# 4. ANÁLISIS ANOVA - DIFERENCIAS ENTRE TIPOS DE RESTAURANTE
-# ==============================================================================
+# 4. analisis anova
 print("\n" + "=" * 70)
-print("🏪 ANÁLISIS 3: COMPARACIÓN ENTRE TIPOS DE RESTAURANTE")
+print(" ANÁLISIS 3: COMPARACIÓN ENTRE TIPOS DE RESTAURANTE")
 print("=" * 70)
 
 # Preparar grupos para ANOVA
@@ -182,17 +172,17 @@ groups = [df[df["restaurant_type"] == rt]["quantity_sold"].values for rt in rest
 # Ejecutar ANOVA
 anova_result = f_oneway(*groups)
 
-print(f"\n📊 Resultados ANOVA:")
+print(f"\n Resultados ANOVA:")
 print(f"   • F-statistic: {anova_result.statistic:.4f}")
 print(f"   • p-value: {anova_result.pvalue:.6f}")
 
 if anova_result.pvalue < 0.05:
-    print(f"   • ✅ Hay diferencias SIGNIFICATIVAS entre tipos de restaurante")
+    print(f"   •  Hay diferencias SIGNIFICATIVAS entre tipos de restaurante")
 else:
-    print(f"   • ❌ NO hay diferencias significativas entre tipos de restaurante")
+    print(f"   •  NO hay diferencias significativas entre tipos de restaurante")
 
 # Estadísticas por tipo
-print(f"\n📈 Estadísticas por Tipo de Restaurante:")
+print(f"\n Estadísticas por Tipo de Restaurante:")
 type_stats = df.groupby("restaurant_type").agg({
     "quantity_sold": ["mean", "std", "count"],
     "sales": "sum"
@@ -209,7 +199,7 @@ type_summary.columns = ["restaurant_type", "mean", "std"]
 best_restaurant = type_summary.loc[type_summary["mean"].idxmax(), "restaurant_type"]
 worst_restaurant = type_summary.loc[type_summary["mean"].idxmin(), "restaurant_type"]
 
-print(f"\n🏆 Ranking de Desempeño:")
+print(f"\n Ranking de Desempeño:")
 ranking = type_summary.sort_values("mean", ascending=False)
 for idx, row in ranking.iterrows():
     print(f"   {row['restaurant_type']}: {row['mean']:.2f} unidades (±{row['std']:.2f})")
@@ -272,7 +262,7 @@ plt.savefig(os.path.join(reports_fig, "anova_restaurant_mejorado.png"),
 print(f"✅ Gráfico guardado: anova_restaurant_mejorado.png")
 
 # Análisis adicional: Heatmap de desempeño temporal (estacionalidad)
-print(f"\n📅 Generando análisis de estacionalidad por tipo...")
+print(f"\n Generando análisis de estacionalidad por tipo...")
 df['month'] = df['date'].dt.month
 df['month_name'] = df['date'].dt.strftime('%b')
 
@@ -301,7 +291,7 @@ plt.savefig(os.path.join(reports_fig, "heatmap_estacionalidad_tipo.png"),
 print(f"✅ Gráfico guardado: heatmap_estacionalidad_tipo.png")
 
 # Identificar mejor mes por tipo de restaurante
-print(f"\n📆 Mejor mes por tipo de restaurante:")
+print(f"\n Mejor mes por tipo de restaurante:")
 for restaurant in performance_matrix.index:
     best_month = performance_matrix.loc[restaurant].idxmax()
     best_value = performance_matrix.loc[restaurant].max()
@@ -311,7 +301,7 @@ for restaurant in performance_matrix.index:
 # 5. MODELO ARIMA - PREDICCIÓN DE VENTAS
 # ==============================================================================
 print("\n" + "=" * 70)
-print("🔮 ANÁLISIS 4: PRONÓSTICO DE VENTAS (ARIMA)")
+print(" ANÁLISIS 4: PRONÓSTICO DE VENTAS (ARIMA)")
 print("=" * 70)
 
 # Preparar serie temporal
@@ -322,14 +312,14 @@ sales_series = sales_series.replace([np.inf, -np.inf], np.nan).dropna()
 train_size = int(len(sales_series) * 0.9)
 train, test = sales_series[:train_size], sales_series[train_size:]
 
-print(f"\n📊 Datos para modelado:")
+print(f"\n Datos para modelado:")
 print(f"   • Total de días: {len(sales_series)}")
 print(f"   • Entrenamiento: {len(train)} días")
 print(f"   • Prueba: {len(test)} días")
 
 try:
     # Entrenar modelo
-    print("\n⏳ Entrenando modelo ARIMA(5,1,2)...")
+    print("\n Entrenando modelo ARIMA(5,1,2)...")
     model = ARIMA(train, order=(5, 1, 2))
     model_fit = model.fit()
     
@@ -341,8 +331,8 @@ try:
     rmse = np.sqrt(mean_squared_error(test, predictions))
     mape = np.mean(np.abs((test - predictions) / test)) * 100
     
-    print(f"\n✅ Modelo entrenado exitosamente")
-    print(f"\n📈 Métricas de Validación:")
+    print(f"\n Modelo entrenado exitosamente")
+    print(f"\n Métricas de Validación:")
     print(f"   • MAE (Error Absoluto Medio): {mae:.2f} unidades")
     print(f"   • RMSE (Raíz del Error Cuadrático Medio): {rmse:.2f} unidades")
     print(f"   • MAPE (Error Porcentual Medio): {mape:.2f}%")
@@ -379,22 +369,20 @@ try:
     
     plt.tight_layout()
     plt.savefig(os.path.join(reports_fig, "arima_forecast_mejorado.png"), dpi=150, bbox_inches='tight')
-    print(f"✅ Gráfico guardado: arima_forecast_mejorado.png")
+    print(f" Gráfico guardado: arima_forecast_mejorado.png")
     
-    print(f"\n🔮 Pronóstico para los próximos 7 días:")
+    print(f"\n Pronóstico para los próximos 7 días:")
     for i, (date, value) in enumerate(future_forecast.items(), 1):
         print(f"   • Día {i} ({date.date()}): {value:.0f} unidades")
     
 except Exception as e:
-    print(f"❌ Error al entrenar ARIMA: {e}")
+    print(f" Error al entrenar ARIMA: {e}")
     future_forecast = None
     model_fit = None
 
-# ==============================================================================
-# 6. GUARDAR RESULTADOS NUMÉRICOS
-# ==============================================================================
+# 6. guardar resultados numericos
 print("\n" + "=" * 70)
-print("💾 GUARDANDO RESULTADOS")
+print(" GUARDANDO RESULTADOS")
 print("=" * 70)
 
 with open(os.path.join(reports_metrics, "analysis_results.txt"), "w", encoding="utf-8") as f:
@@ -424,11 +412,9 @@ with open(os.path.join(reports_metrics, "analysis_results.txt"), "w", encoding="
         for date, value in future_forecast.items():
             f.write(f"  {date.date()}: {value:.0f} unidades\n")
 
-print(f"✅ Resultados guardados en: analysis_results.txt")
+print(f" Resultados guardados en: analysis_results.txt")
 
-# ==============================================================================
 # 7. RESUMEN 
-# ==============================================================================
 print("\n" + "=" * 70)
 print("📋 RESUMEN")
 print("=" * 70 + "\n")
@@ -436,14 +422,14 @@ print("=" * 70 + "\n")
 # Sentimiento vs Ventas
 if abs(corr_quantity) > 0.3 and p_value_quantity < 0.05:
     direction = "positiva" if corr_quantity > 0 else "negativa"
-    print(f"✅ SENTIMIENTO: Correlación {direction} significativa detectada")
+    print(f" SENTIMIENTO: Correlación {direction} significativa detectada")
     print(f"   → El sentimiento en redes sociales {'SI' if corr_quantity > 0 else 'NO'} impacta las ventas")
 else:
-    print(f"⚠️  SENTIMIENTO: No se detectó relación significativa con las ventas")
+    print(f"  SENTIMIENTO: No se detectó relación significativa con las ventas")
 
 # ANOVA
 if anova_result.pvalue < 0.05:
-    print(f"\n✅ TIPOS DE RESTAURANTE: Diferencias significativas encontradas")
+    print(f"\n TIPOS DE RESTAURANTE: Diferencias significativas encontradas")
     best_type = df.groupby("restaurant_type")["quantity_sold"].mean().idxmax()
     print(f"   → Mejor desempeño: {best_type}")
 else:
@@ -458,7 +444,7 @@ if future_forecast is not None:
     print(f"   → Promedio pronosticado: {avg_forecast:.0f} unidades/día")
 
 print("\n" + "=" * 70)
-print("✅ ANÁLISIS COMPLETO FINALIZADO CON ÉXITO")
+print(" ANÁLISIS COMPLETO FINALIZADO CON ÉXITO")
 print("=" * 70)
 print(f"\n Revisa los resultados en:")
 print(f"   • Gráficos: {reports_fig}")
