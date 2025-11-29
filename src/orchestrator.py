@@ -1,8 +1,8 @@
 import logging
 import yaml
-from .data_ingestion import ingest_data
-from .data_transformation import transform_data
-from .data_validation import validate_data
+from src.data_ingestion import ingest_data
+from src.data_transformation import transform_data
+from src.data_validation import validate_data
 
 # generacion del.log
 for handler in logging.root.handlers[:]:

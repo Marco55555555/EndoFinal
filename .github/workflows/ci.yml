@@ -39,7 +39,7 @@ jobs:
           PYTHONPATH: .
         run: |
           echo "=== Running orchestrator.py ==="
-          python src/orchestrator.py
+          python -m src.orchestrator
 
       # 6. Ejecutar módulo de análisis para verificar reporting
       - name: Run analysis module to verify reporting works
